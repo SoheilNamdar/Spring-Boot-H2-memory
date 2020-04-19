@@ -25,13 +25,21 @@ public class ProductController {
     //Produits/{id}
     @GetMapping(value = "Produits/{id}")
     public Product afficherUnProduit(@PathVariable int id){
-       return productdao.findById(id);
+
+        return productdao.findById(id);
     }
 
     @PostMapping(value="/Produits")
     public void ajouterProduit(@RequestBody Product product) {
         Product product1 = productdao.save(product);
     }
+
+    @GetMapping(value = "test/Produits/{prixLimit}")
+    public List<Product> testDeRequetes(@PathVariable int prixLimit) {
+        return productdao.findByPrixGreaterThan(prixLimit);
+    }
+
+
     /*Produits
     @PostMapping(value="/Produits")
     public ResponseEntity<Void> ajouterProduit(@RequestBody Product product){
