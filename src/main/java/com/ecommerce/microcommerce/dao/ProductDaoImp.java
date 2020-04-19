@@ -7,8 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class ProductDaoIpl implements Productdao {
+public class ProductDaoImp implements Productdao {
 
+    //static cvd  ts le monde peut en avoir acces
     public static List<Product> products = new ArrayList<>();
 
     static {
@@ -24,11 +25,17 @@ public class ProductDaoIpl implements Productdao {
 
     @Override
     public Product findById(int id) {
-        return null;
+        for (Product product : products) {
+            if(product.getId() == id) {
+                return product;
+            }
+        }
+        return null ;
     }
 
     @Override
     public Product save(Product product) {
-        return null;
+        products.add(product);
+        return product;
     }
 }

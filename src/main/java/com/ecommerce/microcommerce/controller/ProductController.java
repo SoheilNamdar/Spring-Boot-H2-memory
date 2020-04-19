@@ -3,10 +3,11 @@ package com.ecommerce.microcommerce.controller;
 import com.ecommerce.microcommerce.dao.Productdao;
 import com.ecommerce.microcommerce.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,34 @@ public class ProductController {
     //Produits/{id}
     @GetMapping(value = "Produits/{id}")
     public Product afficherUnProduit(@PathVariable int id){
-       return new Product(id, new String("aaspirateur"), 100);
-
+       return productdao.findById(id);
     }
+
+    @PostMapping(value="/Produits")
+    public void ajouterProduit(@RequestBody Product product) {
+        Product product1 = productdao.save(product);
+    }
+    /*Produits
+    @PostMapping(value="/Produits")
+    public ResponseEntity<Void> ajouterProduit(@RequestBody Product product){
+        Product product1 = productdao.save(product);
+
+        //si le produit n'a pas été ajouté, builder et envoie la réponse noContent
+        if(product == null) {
+            return ResponseEntity.noContent().build();
+        }
+
+        //par contre si le produit a été ajouté, il faut récuperer l'URI
+        //et donc construire son uri pour cela :
+        //ServletUriComponentsBuilder permet de creer une lien (create a links based on) une requette
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath() //from current requette
+                .path("/{id}") //a cet uri ajoute un id, id de produit qu'on aajouté
+                .buildAndExpand(product1.getId()) //remplacer cet id par son contenu par la method buildAndExpand
+                .toUri(); //Tr en uri
+
+        //Maintenant qu'on a le uri on va le retourner
+        return ResponseEntity.created(location).build(); //build pour construire cette reponse
+
+    }*/
 }
